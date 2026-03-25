@@ -50,48 +50,69 @@
 - **结构化数据返回**：将笔记分析结果以JSON格式返回给MCP客户端，便于AI生成评论
 - **评论发布反馈**：提供评论发布结果的实时反馈
 
-## 二、安装步骤
+## 二、MCP Server 快速配置（推荐，全自动免安装）
 
-1. **Python 环境准备**：确保系统已安装 Python 3.8 或更高版本。若未安装，可从 Python 官方网站下载并安装。
+为了方便使用，本项目提供了自动化启动脚本，**无需手动安装任何依赖**，直接在 MCP 客户端（如 Claude for Desktop、Cursor 等）中配置即可，脚本会在首次运行时自动配置虚拟环境并安装所需的依赖和浏览器。
 
-2. **项目获取**：将本项目克隆或下载到本地。
-
-3. **创建虚拟环境**：在项目目录下创建并激活虚拟环境（推荐）：
-   ```bash
-   # 创建虚拟环境
-   python3 -m venv venv
-   
-   # 激活虚拟环境
-   # Windows
-   venv\Scripts\activate
-   # macOS/Linux
-   source venv/bin/activate
-   ```
-
-4. **安装依赖**：在激活的虚拟环境中安装所需依赖：
-   ```bash
-   pip install -r requirements.txt
-   pip install fastmcp
-   ```
-
-5. **安装浏览器**：安装Playwright所需的浏览器：
-   ```bash
-   playwright install
-   ```
-
-## 三、MCP Server 配置
-
-在 MCP Client（如Claude for Desktop）的配置文件中添加以下内容，将本工具配置为 MCP Server：
-
-### Mac 配置示例
+### Mac / Linux 配置示例
 
 ```json
 {
     "mcpServers": {
         "xiaohongshu MCP": {
-            "command": "/绝对路径/到/venv/bin/python3",
+            "command": "/绝对路径/到项目/start.sh",
+            "args": []
+        }
+    }
+}
+```
+
+### Windows 配置示例
+
+```json
+{
+    "mcpServers": {
+        "xiaohongshu MCP": {
+            "command": "C:\\绝对路径\\到项目\\start.bat",
+            "args": []
+        }
+    }
+}
+```
+
+> **注意**：
+> - 路径必须是该项目文件 `start.sh` 或 `start.bat` 的**完整绝对路径**。
+> - 首次运行由于需要下载依赖和浏览器，可能会有一段时间的等待，请耐心等待客户端连接成功。
+
+---
+
+## 三、手动安装与配置（可选）
+
+如果您更喜欢手动控制环境，可以按照以下步骤手动安装：
+
+1. **Python 环境准备**：确保系统已安装 Python 3.8 或更高版本。
+2. **创建虚拟环境**：
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # Windows 下使用 venv\Scripts\activate
+   ```
+3. **安装依赖**：
+   ```bash
+   pip install -r requirements.txt
+   pip install fastmcp
+   playwright install chromium
+   ```
+
+手动安装后，在客户端的配置文件中需要指定虚拟环境的 Python：
+
+**Mac 配置示例**：
+```json
+{
+    "mcpServers": {
+        "xiaohongshu MCP": {
+            "command": "/绝对路径/到项目/venv/bin/python3",
             "args": [
-                "/绝对路径/到/xiaohongshu_mcp.py",
+                "/绝对路径/到项目/xiaohongshu_mcp.py",
                 "--stdio"
             ]
         }
